@@ -8,5 +8,5 @@ script = ExtResource("1_o5qli")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
-[node name="Player" parent="." instance=ExtResource("2_0wfyh")]
-position = Vector2(291, 144)
+[node name="Player" parent="Camera2D" instance=ExtResource("2_0wfyh")]
+position = Vector2(60, 92)

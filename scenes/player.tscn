@@ -1,19 +1,19 @@
 [gd_scene load_steps=4 format=3 uid="uid://bo5uj0u78huso"]
 
 [ext_resource type="Script" uid="uid://bshda2x5ks7et" path="res://scripts/player.gd" id="1_g2els"]
-[ext_resource type="Texture2D" uid="uid://c5rkk0lqx1g4s" path="res://assets/icon.svg" id="2_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://b0wjifnpa7hkk" path="res://assets/curupira/Spritesheet - Animação Idle .png" id="2_g2els"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dqkch"]
-size = Vector2(30, 30)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qhqgy"]
+size = Vector2(7, 22)
 
 [node name="Player" type="CharacterBody2D"]
 motion_mode = 1
 script = ExtResource("1_g2els")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(-9.53674e-07, -9.53674e-07)
-scale = Vector2(0.238281, 0.238281)
-texture = ExtResource("2_qhqgy")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_dqkch")
+position = Vector2(3.5, 1)
+shape = SubResource("RectangleShape2D_qhqgy")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_g2els")
+hframes = 8
