@@ -5,13 +5,10 @@ extends CharacterBody2D
 @export var jump_force = 200
 
 @onready var animated_sprite_2d = $AnimatedSprite2D
-@onready var collision_shape = $CollisionShape2D
 
-# Offsets para ajustar posição quando vira
-@export var collision_offset_right = Vector2(0, 0)
-@export var collision_offset_left = Vector2(-5, 0)
-@export var sprite_offset_right = Vector2(0, 0)
-@export var sprite_offset_left = Vector2(-5, 0)
+# Salva a posição original definida no editor
+@onready var original_sprite_position = animated_sprite_2d.position
+@export var sprite_offset_left = Vector2(5, 0)
 
 func _physics_process(delta):
 	if is_on_floor() == false:
@@ -26,13 +23,11 @@ func _physics_process(delta):
 	if direction != 0:
 		animated_sprite_2d.flip_h = (direction == -1)
 		
-		# Ajusta posições baseado na direção
+		# Usa a posição original como base e adiciona o offset
 		if direction == -1:  # esquerda
-			collision_shape.position = collision_offset_left
-			animated_sprite_2d.position = sprite_offset_left
+			animated_sprite_2d.position = original_sprite_position + sprite_offset_left
 		else:  # direita
-			collision_shape.position = collision_offset_right
-			animated_sprite_2d.position = sprite_offset_right
+			animated_sprite_2d.position = original_sprite_position
 	
 	velocity.x = direction * speed
 	move_and_slide()
