@@ -1,7 +1,5 @@
 extends Node2D
 
-@onready var start_position = $StartPosition
-@onready var player = $Player
 
 func _ready():
 	pass
