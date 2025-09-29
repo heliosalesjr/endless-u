@@ -3,61 +3,56 @@ extends Node2D
 @export var platform_scene: PackedScene
 @export var player: CharacterBody2D
 
-const SCREEN_WIDTH = 480.0
-const PLATFORM_WIDTH = 100.0
-const LEFT_X = 50.0
-const RIGHT_X = 430.0
+# A câmera mostra de X=120 até X=360 (240px centrados em X=240)
+const CAMERA_CENTER_X = 240.0
+const VISIBLE_WIDTH = 240.0
+const PLATFORM_WIDTH = 50.0
 
-var platforms_created = 0
-var platform_positions = []
+# Plataformas posicionadas dentro da área visível
+const LEFT_X = CAMERA_CENTER_X - (VISIBLE_WIDTH / 2.0) + (PLATFORM_WIDTH / 2.0)  # 170
+const RIGHT_X = CAMERA_CENTER_X + (VISIBLE_WIDTH / 2.0) - (PLATFORM_WIDTH / 2.0)  # 310
+
+var highest_platform_y = 0.0
+var platforms = []
 
 func _ready():
 	if not platform_scene or not player:
-		print("FALTA platform_scene ou player!")
 		return
 	
-	print("=== INICIANDO CRIAÇÃO ===")
-	print("Player em Y: ", player.global_position.y)
-	
-	var camera = get_viewport().get_camera_2d()
-	if camera:
-		print("Câmera em Y: ", camera.global_position.y)
+	print("Área visível: X=", CAMERA_CENTER_X - VISIBLE_WIDTH/2, " até X=", CAMERA_CENTER_X + VISIBLE_WIDTH/2)
+	print("LEFT_X: ", LEFT_X, " | RIGHT_X: ", RIGHT_X)
 	
 	await get_tree().process_frame
 	
-	# Cria 8 plataformas ACIMA do player
-	for i in range(8):
-		var x = LEFT_X if i % 2 == 0 else RIGHT_X
-		var y = player.global_position.y - 50 - (i * 100)
-		
-		create_platform_at(x, y, i)
-		platform_positions.append(Vector2(x, y))
+	highest_platform_y = player.global_position.y - 50
 	
-	print("=== FINALIZADO ===")
-	print("Total: ", platforms_created)
+	for i in range(15):
+		spawn_platform()
 
-func create_platform_at(x: float, y: float, index: int):
+func spawn_platform():
+	var x = LEFT_X if (randi() % 2) == 0 else RIGHT_X
+	var y = highest_platform_y - randf_range(80, 120)
+	
 	var platform = platform_scene.instantiate()
 	platform.global_position = Vector2(x, y)
-	platform.name = "Plat_" + str(index)
 	
 	get_parent().add_child(platform)
-	platforms_created += 1
-	
-	print("Plataforma ", index, " criada em Y=", y)
+	platforms.append(platform)
+	highest_platform_y = y
 
 func _process(_delta):
-	queue_redraw()
-
-func _draw():
-	# Desenha círculos onde as plataformas estão
-	for pos in platform_positions:
-		var local_pos = to_local(pos)
-		draw_circle(local_pos, 10, Color.RED)
+	if not player:
+		return
 	
-	# Info no topo (posição global na tela)
-	if player:
-		var camera = get_viewport().get_camera_2d()
-		var cam_y = camera.global_position.y if camera else 0
-		var text = "Plats: " + str(platforms_created) + " | Player Y: " + str(int(player.global_position.y)) + " | Cam Y: " + str(int(cam_y))
-		draw_string(ThemeDB.fallback_font, Vector2(10, 30), text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.YELLOW)
+	if highest_platform_y - player.global_position.y < 800:
+		spawn_platform()
+	
+	cleanup_platforms()
+
+func cleanup_platforms():
+	for i in range(platforms.size() - 1, -1, -1):
+		var platform = platforms[i]
+		if is_instance_valid(platform):
+			if platform.global_position.y > player.global_position.y + 1000:
+				platform.queue_free()
+				platforms.remove_at(i)

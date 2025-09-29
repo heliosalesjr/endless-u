@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cjp2tvspfjb5p" path="res://assets/textures/bg/Blue.png" id="1_2sjy5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jyhfs"]
-size = Vector2(100, 18)
+size = Vector2(50, 9)
 
 [node name="Tile" type="StaticBody2D"]
 
@@ -11,6 +11,5 @@ size = Vector2(100, 18)
 shape = SubResource("RectangleShape2D_jyhfs")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(1.90735e-06, 0)
-scale = Vector2(1.5625, 0.296875)
+scale = Vector2(0.78125, 0.148437)
 texture = ExtResource("1_2sjy5")
