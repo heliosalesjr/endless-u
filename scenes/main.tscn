@@ -105,6 +105,3 @@ position = Vector2(368, 202)
 script = ExtResource("5_tefeu")
 platform_scene = ExtResource("6_tefeu")
 player = NodePath("../Player")
-
-[node name="Tile" parent="." instance=ExtResource("6_tefeu")]
-position = Vector2(232, 342)
